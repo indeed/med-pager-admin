@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="MedsOnCall Pager Elective core administration page." />
+
+    <title>MOC Pager Admin</title>
+
+    <link rel="icon" href="">
+    <link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <!-- libs -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/tether/dist/js/tether.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/firebase/firebase.js"></script>
+    <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
+
+    <!-- app js -->
+    <script src="js/app.js"></script>
+    <script src="js/services.js"></script>
+
+</head>
+
+<body ng-app="moc-admin" ng-controller="mainCtrl">
+    <div class="input-group search-bar">
+        <div class="input-group-addon"><span class="fa fa-search"></span></div>
+        <input type="text" class="form-control" placeholder="Search..." ng-model="questionsSearch">
+    </div>
+    <div class="card">
+        <table class="table table-striped">
+            <thead class="bg-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Question</th>
+                    <th>Choices</th>
+                    <th>Answer</th>
+                    <th>Followup</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(id, q) in data.pagerQuestions | objFilter: {param: 'question', query: questionsSearch}">
+                    <th scope="row">{{id}}</th>
+                    <td>
+                        {{q.question}}
+                    </td>
+                    <td class="list-group">
+                        <li class="list-group-item" ng-repeat="(letter, choice) in q.choices">
+                            <strong>{{letter}}</strong> {{choice}}
+                        </li>
+                    </td>
+                    <td><strong>{{q.answers.first}}</strong></td>
+                    <td><strong>{{q.answers.second}}</strong></td>
+                    <td>
+                        <button class="btn btn-block btn-primary"><span class="fa fa-fw fa-edit"></span></button>
+                        <button class="btn btn-block btn-danger" ng-click="delete(data.pagerQuestions, id)"><span class="fa fa-fw fa-trash"></span></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <a ng-click="authenticate('POMelective15')">aaa</a>
+    <a ng-click="signOut()">aada</a>
+    <button class="btn-fab btn btn-success" ng-click="save()"><span class="fa fa-fw fa-floppy-o"></span> Save Changes</button>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "med-pager-admin",
+  "authors": [
+    "Shun Yu Rao <shunyu.rao@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularfire": "^2.0.1",
+    "bootstrap": "4.0.0-alpha.3",
+    "font-awesome": "^4.6.3"
+  }
+}
