@@ -27,46 +27,87 @@
 </head>
 
 <body ng-app="moc-admin" ng-controller="mainCtrl">
-    <div class="input-group search-bar">
-        <div class="input-group-addon"><span class="fa fa-search"></span></div>
-        <input type="text" class="form-control" placeholder="Search..." ng-model="questionsSearch">
+    <h2 class="title">
+        MOC Pager Administration Page
+        <button type="button" class="btn btn-danger pull-right" ng-click="signOut()" ng-hide="!auth">
+            <span class="fa fa-sign-out"></span>
+        </button>
+    </h2>
+    <hr>
+    <div ng-hide="!auth">
+        <h4>Starred Questions</h4>
+        <hr>
+        <div class="input-group search-bar">
+            <div class="input-group-addon"><span class="fa fa-search"></span></div>
+            <input type="text" class="form-control" placeholder="Search..." ng-model="starredSearch">
+        </div>
+        <div class="card">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th width="86px">ID</th>
+                        <th width="86px">Stars</th>
+                        <th>Question</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="q in starred | filter : starredSearch | orderBy : 'starred' : true">
+                        <td scope="row">{{q.id}}</td>
+                        <td><strong>{{q.starred}}</strong>&nbsp;<span class="text-muted fa fa-star"></span></td>
+                        <td>
+                            {{q.question}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <h4>Responses</h4>
+        <hr>
+        <div class="input-group search-bar">
+            <div class="input-group-addon"><span class="fa fa-search"></span></div>
+            <input type="text" class="form-control" placeholder="Search..." ng-model="questionsSearch">
+        </div>
+        <div class="card">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>qID</th>
+                        <th>sID</th>
+                        <th>Answer</th>
+                        <th>Answer 2</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="r in responses | filter : questionsSearch | orderBy : 'starred' : true">
+                        <td scope="row">{{r.question}}</td>
+                        <td>{{r.sID}}</td>
+                        <td>
+                            {{r.answer}}&nbsp;
+                            <span class="fa" ng-class="{'fa-check': r.correct, 'fa-times': !r.correct}">
+                        </td>
+                        <td>
+                            {{r.followup}}
+                            <!--
+                            &nbsp;<span class="fa" ng-class="{'fa-check': r.followupCorrect, 'fa-times': !r.followupCorrect}">
+                            -->
+                        </td>
+                        <td>{{r.time}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <a class="btn-fab btn btn-success" id="export-csv">
+            <span class="fa fa-fw fa-download"></span> Export Responses
+        </a>
     </div>
-    <div class="card">
-        <table class="table table-striped">
-            <thead class="bg-primary">
-                <tr>
-                    <th>ID</th>
-                    <th>Question</th>
-                    <th>Choices</th>
-                    <th>Answer</th>
-                    <th>Followup</th>
-                    <th>Options</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="(id, q) in data.pagerQuestions | objFilter: {param: 'question', query: questionsSearch}">
-                    <th scope="row">{{id}}</th>
-                    <td>
-                        {{q.question}}
-                    </td>
-                    <td class="list-group">
-                        <li class="list-group-item" ng-repeat="(letter, choice) in q.choices">
-                            <strong>{{letter}}</strong> {{choice}}
-                        </li>
-                    </td>
-                    <td><strong>{{q.answers.first}}</strong></td>
-                    <td><strong>{{q.answers.second}}</strong></td>
-                    <td>
-                        <button class="btn btn-block btn-primary"><span class="fa fa-fw fa-edit"></span></button>
-                        <button class="btn btn-block btn-danger" ng-click="delete(data.pagerQuestions, id)"><span class="fa fa-fw fa-trash"></span></button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <a ng-click="authenticate('POMelective15')">aaa</a>
-    <a ng-click="signOut()">aada</a>
-    <button class="btn-fab btn btn-success" ng-click="save()"><span class="fa fa-fw fa-floppy-o"></span> Save Changes</button>
+    <form class="form-group" ng-class="{'has-danger': errormsg != null}" ng-hide="auth">
+        <input type="password" class="form-control form-control-danger" placeholder="Password" ng-model="authPassword">
+        <div class="form-control-feedback" ng-hide="errormsg == null">{{errormsg}}</div>
+        <button type="submit" class="btn-submit btn btn-secondary" ng-click="authenticate(authPassword)">
+            Authenticate
+        </button>
+    </form>
 </body>
 
 </html>
